@@ -1,0 +1,4 @@
+- @tracks.each do |track|
+  .row
+    .track.columns{ data: track.to_h.merge(id: track.spotify_id) }
+      = "#{ track.name } - #{ track.artist }"

@@ -5,10 +5,17 @@
 window.currentPlayTime = 0
 window.highlightLyricsInterval = null
 
+currentSongData = null
+
 pause = ->
   window.currentPlayTime = 0
 
-  playSpotify 3, 58
+  time = currentSongData.duration.split ':'
+
+  minute = time[0]
+  second = time[1] 
+
+  playSpotify minute, second
 
   clearInterval window.highlightLyricsInterval
 
@@ -38,18 +45,28 @@ playSpotify = (startMinute, startSecond) ->
   window.open "spotify:track:#{$('#spotify-track-id').val()}##{startMinute}:#{startSecond}", '_parent'
 
 getLyrics = (artist, track) ->
-  $.get "/lyrics/#{artist}/#{track}", (data) -> $('#lyrics').html data
+  $.get "/lyrics/#{artist}/#{track}", (data) -> $('#lyrics').show().html data
 
-getSpotifyId = (artist, track) ->
-  $.get "/track/#{artist}/#{track}", (data) -> $('#spotify-track-id').val data.spotify_track_id
+getSpotifyTracks = (artist, track) ->
+  $.get "/track?artist=#{artist}&track=#{track}", (data) -> $('#tracks').show().html data
 
 $ ->
   $('#play').on 'click', -> playSpotify 0, 0
   $('#pause').on 'click', pause
 
   $('#get-lyrics').on 'click', ->
-    getLyrics $('#artist').val(), $('#track').val()
-    getSpotifyId $('#artist').val(), $('#track').val()
+    getSpotifyTracks $('#artist').val(), $('#track').val()
+
+    $('#lyrics').hide()
+
+  $('#tracks').on 'click', '.track', (e) ->
+    currentSongData = $(@).data()
+
+    $('#spotify-track-id').val currentSongData.id
+
+    getLyrics currentSongData.artist, currentSongData.name
+
+    $('#tracks').hide()
 
   $('#lyrics').on 'click', '.lyric', (e) ->
     e.preventDefault()
@@ -57,6 +74,3 @@ $ ->
     $(@).addClass 'current'
 
     playSpotify $(@).data().minute, $(@).data().second
-
-  getLyrics 'taylor swift', 'tim mcgraw'
-  getSpotifyId 'taylor swift', 'tim mcgraw'
