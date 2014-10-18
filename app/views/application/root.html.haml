@@ -1,3 +1,7 @@
-%iframe#spotify-player{ src: 'https://embed.spotify.com/?uri=spotify:track:4jtyUzZm9WLc2AdaJ1dso7', width: '300px', height: '78px', frameborder: 0,allowtransparency: true }
-
-= @lyrics
+= text_field_tag 'artist'
+= text_field_tag 'track'
+= hidden_field_tag 'spotify-track-id', nil
+= button_tag 'Get Lyrics', id: 'get-lyrics'
+= button_tag 'Play', id: 'play'
+= button_tag 'Pause', id: 'pause'
+#lyrics

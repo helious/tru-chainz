@@ -49,7 +49,6 @@ class LyricQuery
       end
 
       return lyric_hash
-
    end
 
 end
