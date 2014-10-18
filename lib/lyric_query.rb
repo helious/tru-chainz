@@ -35,8 +35,21 @@ class LyricQuery
 
          lyrics = HTTParty.get(lrc_link)
          lyrics = lyrics.body
-         return lyrics
+         return parse_lyrics_to_hash(lyrics)
       end
+   end
+
+   def parse_lyrics_to_hash lyrics
+      lyric_hash = Hash.new
+      lyric_array = lyrics.split("\n")
+      lyric_array.each do | lyric | 
+         edited_lyric = lyric.sub('[','')
+         edited_lyric = edited_lyric.split(']')
+         lyric_hash[edited_lyric[0]] = edited_lyric[1]  
+      end
+
+      return lyric_hash
+
    end
 
 end
