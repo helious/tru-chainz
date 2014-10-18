@@ -36,7 +36,8 @@ class LyricQuery
 
          lyrics = HTTParty.get(lrc_link)
          lyrics = lyrics.body
-         return parse_lyrics_to_hash(lyrics)
+         lyric_hash = parse_lyrics_to_hash(lyrics)
+         return add_genius_annotations(lyric_hash, artist, song)
       end
    end
 
@@ -56,11 +57,8 @@ class LyricQuery
       return lyric_hash
    end
 
-   def add_genius_annotations artist, song
-   
-	  lyric_hash = query_song(artist,song)
-	  gquery = GeniusQuery.new
-      genius_song_id = gquery.get_genius_result_id(artist,song)
+   def add_genius_annotations lyric_hash, artist, song
+      genius_song_id = GeniusQuery.get_genius_result_id(artist,song)
       
 	  if (genius_song_id == -1) 
          return lyric_hash
