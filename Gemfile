@@ -8,4 +8,4 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 
 gem 'haml', '4.0'
-gem 'httparty'
+gem 'rapgenius', '~> 1.0.2'
