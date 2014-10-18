@@ -9,3 +9,7 @@ gem 'jquery-rails'
 
 gem 'haml', '4.0'
 gem 'rapgenius', '~> 1.0.2'
+gem 'fuzzy-string-match', '~> 0.9.7'
+
+gem 'better_errors'
+gem 'binding_of_caller'
