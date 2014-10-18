@@ -1,17 +1,19 @@
 require 'lyric_query'
+require 'spotify'
 
 class ApplicationController < ActionController::Base
   Lyric = Struct.new :text, :start_minute, :start_second
 
   protect_from_forgery with: :exception
 
-  def root
-  end
+  def root; end
 
   def track
-    spotify_track_id = '17HgOVS1ApPBmQgW1o3d17'
+    spotify = GetSpotify.new
 
-    render json: { spotify_track_id: spotify_track_id }
+    @tracks = spotify.getSpotify params[:artist], params[:track]
+
+    render layout: false
   end
 
   def lyrics
