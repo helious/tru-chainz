@@ -1,5 +1,6 @@
 require 'json'
 require 'httparty'
+require 'rails'
 #require 'pry'
 
 class SpotifyTrack < Struct.new(:spotify_id, :duration, :artist, :name, :cover_art_url) 
@@ -8,8 +9,17 @@ end
 class GetSpotify
 #query_song returns -1 if it cannot find a song, else it returns the lyrics
 	def getSpotify artist_query, song_query
-
-	  json_query = HTTParty.get(URI.encode("https://api.spotify.com/v1/search?q=track:#{song_query}+artist:#{artist_query}&limit=5&type=track"))
+		
+	  if artist_query.blank? && song_query.blank?
+		json_query = HTTParty.get(URI.encode("https://api.spotify.com/v1/search?q=year:2005&limit=5&type=track"))
+	  elsif artist_query.blank?
+	   json_query = HTTParty.get(URI.encode("https://api.spotify.com/v1/search?q=track:#{song_query}&limit=5&type=track"))
+	  elsif song_query.blank?
+	   json_query = HTTParty.get(URI.encode("https://api.spotify.com/v1/search?q=artist:#{artist_query}&limit=5&type=track"))
+	  else
+		json_query = HTTParty.get(URI.encode("https://api.spotify.com/v1/search?q=track:#{song_query}+artist:#{artist_query}&limit=5&type=track"))
+	  end
+	  
 	  #json_query = HTTParty.get(URI.encode("http://geci.me/api/lyric/#{song_query}/#{artist_query}?json=true"))
 	  #puts json_query
 	  json_query = json_query.body
