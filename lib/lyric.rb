@@ -1,7 +1,7 @@
 class Lyric
-	attr_accessor :lyric, :annotation
+	attr_accessor :lyric, :annotations
 	def initialize 
 		@lyric = nil
-		@annotation = nil
+		@annotations = nil
 	end
 end

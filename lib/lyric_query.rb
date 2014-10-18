@@ -58,8 +58,33 @@ class LyricQuery
       return lyric_hash
    end
 
-   def add_genius_annotations lyric_hash
+   def add_genius_annotations lyric_hash, artist, song
+      genius_song_id = GeniusQuery.get_genius_result_id(artist,song)
+      if (genius_song_id == -1) 
+         return lyric_hash
+      else 
+         
+		 genius_song = GeniusQuery.get_genius_song(genius_song_id)
+		 
+		 i=0
+		 j=0
+		 while i < genius_song.length
+			while j < lyric_hash.length
+				jarow = FuzzyStringMatch::JaroWinkler.create( :pure )
+				perct = jarow.getDistance(genius_song.lines[i].lyric, lyric_hash[j].lyric)
+				if perct > 0.5
+					lyric_hash[j].annotations = genius_song.lines[i].annotations
+					i+=1
+				elsif j > 1
+					lyric_hash[j].annotations = lyric_hash[j-1].annotations
+				
+				end
+				j+=1
+			end
+			i+=1
+		end
 
+      end 
    end
 
 end
