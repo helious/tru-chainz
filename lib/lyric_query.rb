@@ -3,7 +3,8 @@ require 'httparty'
 
 class LyricQuery
    attr_accessor :artist, :song, :lrc_link, :lyrics, :found
-   def initialize()
+
+   def initialize
       #instance variables
       @song = nil
       @artist = nil
@@ -13,7 +14,7 @@ class LyricQuery
    end
 
    #query_song returns -1 if it cannot find a song, else it returns the lyrics
-   def query_song(artist_query, song_query)
+   def query_song artist_query, song_query
       artist = artist_query
       song = song_query
 
@@ -35,7 +36,7 @@ class LyricQuery
          lyrics = HTTParty.get(lrc_link)
          lyrics = lyrics.body
          return lyrics
-
+      end
    end
 
 end

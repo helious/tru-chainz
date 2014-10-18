@@ -3,4 +3,4 @@
 //= require_tree .
 
 $ ->
-  $('#spotify-player').attr 'src', 'https://embed.spotify.com/?uri=spotify:track:0GG7ei637NDIN2w11TWtLC'
+  $('#spotify-player').attr 'src', 'https://embed.spotify.com/?uri=spotify:track:17HgOVS1ApPBmQgW1o3d17'
