@@ -1,6 +1,6 @@
 require 'rapgenius'
 
-class RapGenius
+class GeniusQuery
     def initialize
     end
 

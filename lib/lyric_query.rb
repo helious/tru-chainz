@@ -1,6 +1,8 @@
 require 'json'
 require 'httparty'
 require 'lyric'
+require 'genius_query'
+require 'fuzzystringmatch'
 
 class LyricQuery
    attr_accessor :artist, :song, :lrc_link, :lyrics, :found
@@ -49,11 +51,15 @@ class LyricQuery
          edited_lyric = lyric.sub('[','')
          edited_lyric = edited_lyric.split(']')
          lyric_object.lyric = edited_lyric[1]
-         
+
          lyric_hash[edited_lyric[0]] = lyric_object  
       end
 
       return lyric_hash
+   end
+
+   def add_genius_annotations lyric_hash
+
    end
 
 end
