@@ -56,7 +56,8 @@ class LyricQuery
       return lyric_hash
    end
 
-   def add_genius_annotations lyric_hash, artist, song
+   def add_genius_annotations artist, song
+	  lyric_hash = query_song(artist,song)
       genius_song_id = GeniusQuery.get_genius_result_id(artist,song)
       if (genius_song_id == -1) 
          return lyric_hash
