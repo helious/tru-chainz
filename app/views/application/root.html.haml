@@ -1,8 +1,16 @@
-= text_field_tag 'artist'
-= text_field_tag 'track'
 = hidden_field_tag 'spotify-track-id', nil
-= button_tag 'Get Lyrics', id: 'get-lyrics'
-= button_tag 'Play', id: 'play'
-= button_tag 'Pause', id: 'pause'
-#lyrics
-#tracks
+
+.row
+  = render 'side_panel'
+  .small-9.columns.no-padding
+    #track-player.row.hide
+      .small-3.columns
+        .row
+          .columns
+            = image_tag nil, id: 'album-art'
+        .row
+          #track-player-buttons.columns
+            #play.play
+      .small-5.columns
+        #lyrics
+      .small-4.columns

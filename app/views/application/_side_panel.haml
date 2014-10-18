@@ -1,0 +1,22 @@
+.small-3.columns
+  .row
+    .columns
+      = link_to root_url do
+        = image_tag 'logo.png'
+  .row
+    .columns
+      = image_tag 'linebyline.png'
+  .row
+    .columns.centered
+      %h2 Search for a song:
+  .row.bump
+    .columns.no-padding
+      = text_field_tag 'track', '', placeholder: 'Song Title'
+  .row.bump
+    .columns.no-padding
+      = text_field_tag 'artist', '', placeholder: 'Artist Name'
+  .row
+    .columns.no-padding
+      = button_tag 'Get Lyrics', id: 'get-lyrics', class: 'right'
+  .row
+    #tracks

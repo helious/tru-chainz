@@ -45,22 +45,38 @@ playSpotify = (startMinute, startSecond) ->
   window.open "spotify:track:#{$('#spotify-track-id').val()}##{startMinute}:#{startSecond}", '_parent'
 
 getLyrics = (artist, track) ->
-  $.get "/lyrics/#{artist}/#{track}", (data) -> $('#lyrics').show().html data
+  $('#lyrics').hide()
+
+  $.get "/lyrics/#{artist}/#{track}", (data) ->
+    $('#track-player').show()
+    $('#lyrics').show().html data
 
 getSpotifyTracks = (artist, track) ->
   $.get "/track?artist=#{artist}&track=#{track}", (data) -> $('#tracks').show().html data
 
 $ ->
-  $('#play').on 'click', -> playSpotify 0, 0
-  $('#pause').on 'click', pause
+  $('#play').on 'click', ->
+    if $(@).hasClass 'play'
+      $(@).addClass('pause').removeClass 'play'
+
+      playSpotify 0, 0
+    else
+      $(@).addClass('play').removeClass 'pause'
+
+      pause()
 
   $('#get-lyrics').on 'click', ->
     getSpotifyTracks $('#artist').val(), $('#track').val()
 
-    $('#lyrics').hide()
-
   $('#tracks').on 'click', '.track', (e) ->
+    if currentSongData
+      $('#play').addClass('play').removeClass 'pause'
+
+      pause()
+
     currentSongData = $(@).data()
+
+    $('#album-art').attr 'src', currentSongData.coverArtUrl
 
     $('#spotify-track-id').val currentSongData.id
 
@@ -71,6 +87,6 @@ $ ->
   $('#lyrics').on 'click', '.lyric', (e) ->
     e.preventDefault()
 
-    $(@).addClass 'current'
+    $('#play').addClass('pause').removeClass 'play'
 
     playSpotify $(@).data().minute, $(@).data().second
