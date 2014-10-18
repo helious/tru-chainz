@@ -23,14 +23,12 @@ class LyricQuery
 
       results = nil
 
-      json_query = HTTParty.get(URI.encode("http://geci.me/api/lyric/#{song_query}/#{artist_query}?json=true"))
+      json_query = HTTParty.get("http://geci.me/api/lyric/#{ URI.encode song_query }/#{ URI.encode artist_query }?json=true")
       json_query = json_query.body
 
       json_hash = JSON.parse(json_query)
 
-      if json_hash["count"] == 0
-         return -1
-      else
+      unless json_hash["count"] == 0
          results = json_hash["result"]
          #Just get the first element of the array
          res = results[0]
@@ -40,6 +38,8 @@ class LyricQuery
          lyrics = lyrics.body
          return parse_lyrics_to_hash(lyrics)
       end
+
+      []
    end
 
    def parse_lyrics_to_hash lyrics
