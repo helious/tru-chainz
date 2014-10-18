@@ -1,7 +1,7 @@
 require 'json'
 require 'httparty'
-require 'lyric'
-require 'genius_query'
+require_relative 'lyric'
+require_relative 'genius_query'
 require 'fuzzystringmatch'
 
 class LyricQuery
@@ -38,8 +38,6 @@ class LyricQuery
          lyrics = lyrics.body
          return parse_lyrics_to_hash(lyrics)
       end
-
-      []
    end
 
    def parse_lyrics_to_hash lyrics
