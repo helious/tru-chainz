@@ -1,5 +1,6 @@
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui
 //= require_tree .
 
 window.currentPlayTime = 0
@@ -45,23 +46,23 @@ playSpotify = (startMinute, startSecond) ->
   window.open "spotify:track:#{$('#spotify-track-id').val()}##{startMinute}:#{startSecond}", '_parent'
 
 getLyrics = (artist, track) ->
-  $('#lyrics').hide()
-
   $.get "/lyrics/#{artist}/#{track}", (data) ->
-    $('#track-player').show()
+    $('#track-player').show 'slide', { direction: 'left' }, 400
     $('#lyrics').show().html data
 
 getSpotifyTracks = (artist, track) ->
   $.get "/track?artist=#{artist}&track=#{track}", (data) -> $('#tracks').show().html data
 
 $ ->
+  $('#track-player').css 'min-height', $(window).height()
+
   $('#play').on 'click', ->
-    if $(@).hasClass 'play'
+    if $('#play').hasClass 'play'
       $(@).addClass('pause').removeClass 'play'
 
       playSpotify 0, 0
     else
-      $(@).addClass('play').removeClass 'pause'
+      $('#play').addClass('play').removeClass 'pause'
 
       pause()
 
@@ -69,20 +70,23 @@ $ ->
     getSpotifyTracks $('#artist').val(), $('#track').val()
 
   $('#tracks').on 'click', '.track', (e) ->
+    $('#track-player').hide 'slide', { direction: 'right' }, 400
+
     if currentSongData
       $('#play').addClass('play').removeClass 'pause'
 
       pause()
 
-    currentSongData = $(@).data()
+    $('.track').removeClass 'current'
+
+    currentSongData = $(@).addClass('current').data()
 
     $('#album-art').attr 'src', currentSongData.coverArtUrl
-
+    $('#track-title').text currentSongData.name
+    $('#track-artist').text currentSongData.artist
     $('#spotify-track-id').val currentSongData.id
 
     getLyrics currentSongData.artist, currentSongData.name
-
-    $('#tracks').hide()
 
   $('#lyrics').on 'click', '.lyric', (e) ->
     e.preventDefault()
