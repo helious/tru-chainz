@@ -62,7 +62,7 @@ playSpotify = (startMinute, startSecond) ->
     for lyric in $ '.lyric'
       $lyricData = $(lyric).data()
 
-      if ($lyricData.minute * 60 + $lyricData.second) * 1000 < window.currentPlayTime
+      if (parseInt($lyricData.minute) * 60 + parseInt($lyricData.second)) * 1000 < window.currentPlayTime
         $(lyric).removeClass 'current'
       else
         $(lyric).parents('.row').prev().find('.lyric').addClass 'current'
