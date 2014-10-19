@@ -64,7 +64,7 @@ class LyricQuery
         end
       end
 
-      return lyric_hash
+      return Hash[lyric_hash.sort]
    end
 
    def add_genius_annotations lyric_hash, artist, song
