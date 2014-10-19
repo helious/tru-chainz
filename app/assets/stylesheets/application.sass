@@ -6,7 +6,6 @@ $red: #f5110a
 
 h1, h2, h3
   color: #f5110a
-  text-align: center
 
 a
   text-decoration: none
@@ -29,8 +28,15 @@ button
   padding-left: 0
   padding-right: 0
 
+.no-vertical-margin
+  margin-top: 0
+  margin-bottom: 0
+
 .bump
   padding-bottom: 0.75em
+
+.fixed
+  position: fixed
 
 .track
   color: #ffffff
@@ -49,8 +55,9 @@ button
   color: #000000
   padding: 30px
 
-#track-player-buttons
-  text-align: center
+#track-progress-bar
+  background: #000000
+  height: 7px
 
 #play
   display: inline-block
@@ -67,5 +74,19 @@ button
     &:hover
       background: image_url("pause-hover.png")
 
-#track-title
+.track-title
   font-size: 1.65em
+
+#track-player
+  .small-3
+    text-align: center
+
+    .track-title
+      font-size: 1em
+      font-weight: 500
+
+#track-lyrics
+  overflow-y: scroll
+
+#lyric-annotation
+  border-left: 1px solid $red

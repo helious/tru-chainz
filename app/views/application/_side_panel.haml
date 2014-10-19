@@ -1,5 +1,5 @@
-.small-3.columns
-  .row
+.small-3.columns.fixed
+  .row.bump
     .columns
       = link_to root_url do
         = image_tag 'logo.png'
@@ -7,7 +7,7 @@
     .columns
       = image_tag 'linebyline.png'
   .row
-    .columns.centered
+    .columns
       %h2 Search for a song:
   .row.bump
     .columns.no-padding
@@ -19,4 +19,8 @@
     .columns.no-padding
       = button_tag 'Get Lyrics', id: 'get-lyrics', class: 'right'
   .row
+    #tracks-header.columns.hide
+      %h2 Songs:
+  .row
     #tracks
+      %span Search for some songs!

@@ -4,18 +4,38 @@
   = render 'side_panel'
   .small-9.columns.no-padding
     #track-player.row.hide
-      .small-3.columns
-        .row
-          .columns
+      .small-3.columns.no-padding
+        .row.bump
+          .columns.no-padding
             = image_tag nil, id: 'album-art'
         .row
-          #track-player-buttons.columns
+          .columns
+            %span.track-title
+        .row.bump
+          .columns
+            %span#track-album
+        .row
+          .columns.no-padding
+            #track-progress-bar
+        .row.bump
+          .columns.no-padding
+            %span#track-time.left
+            %span#track-duration.right
+        .row
+          .columns
             #play.play
-      .small-5.columns
+      #track-lyrics.small-5.columns
         .row.bump
           #track.columns
-            %span#track-title
+            %span.track-title
             %span#track-artist
         .row
           #lyrics.columns
-      .small-4.columns
+      #lyric-annotation.small-4.columns.hide.no-padding
+        .row
+          .columns.no-padding
+            %h2.no-vertical-margin Annotation 
+        .row
+          .columns
+            %span#annotation-text
+

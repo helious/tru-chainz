@@ -28,7 +28,29 @@ playSpotify = (startMinute, startSecond) ->
   clearInterval window.highlightLyricsInterval
 
   highlightLyrics = ->
+    getZero = (second) ->
+      aZero = '0'
+
+      aZero = '' if currentPlayTimeSecond >= 10
+
+      aZero
+
     window.currentPlayTime += 100
+
+    currentPlayTimeMinute = parseInt(window.currentPlayTime / 1000 / 60)
+    currentPlayTimeSecond = parseInt(window.currentPlayTime / 1000) - currentPlayTimeMinute * 60
+
+    $('#track-time').text "#{currentPlayTimeMinute}:#{getZero currentPlayTimeSecond}#{currentPlayTimeSecond}"
+
+    time = currentSongData.duration.split ':'
+
+    minute = time[0]
+    second = time[1]
+
+    totalTrackDuration = parseInt(minute) * 60 * 1000 + parseInt(second) * 1000
+    trackProgress = window.currentPlayTime / totalTrackDuration * 100
+
+    $('#track-progress-bar').css 'background', "linear-gradient(to right, #f5110a #{trackProgress}%,#000000 #{trackProgress}%,#000000 100%)"
 
     for lyric in $ '.lyric'
       $lyricData = $(lyric).data()
@@ -51,10 +73,13 @@ getLyrics = (artist, track) ->
     $('#lyrics').show().html data
 
 getSpotifyTracks = (artist, track) ->
-  $.get "/track?artist=#{artist}&track=#{track}", (data) -> $('#tracks').show().html data
+  $.get "/track?artist=#{artist}&track=#{track}", (data) ->
+    $('#tracks, #tracks-header').show()
+    $('#tracks').html data
 
 $ ->
   $('#track-player').css 'min-height', $(window).height()
+  $('#track-lyrics').css 'max-height', $(window).height() - 60
 
   $('#play').on 'click', ->
     if $('#play').hasClass 'play'
@@ -82,9 +107,13 @@ $ ->
     currentSongData = $(@).addClass('current').data()
 
     $('#album-art').attr 'src', currentSongData.coverArtUrl
-    $('#track-title').text currentSongData.name
+    $('.track-title').text currentSongData.name
+    $('#track-album').text currentSongData.album
     $('#track-artist').text currentSongData.artist
     $('#spotify-track-id').val currentSongData.id
+    $('#track-time').text '0:00'
+    $('#track-duration').text currentSongData.duration.substr(1)
+    $('#track-progress-bar').css 'background', "linear-gradient(to right, #f5110a 0%,#000000 0%,#000000 100%)"
 
     getLyrics currentSongData.artist, currentSongData.name
 

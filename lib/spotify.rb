@@ -3,7 +3,7 @@ require 'httparty'
 require 'rails'
 #require 'pry'
 
-class SpotifyTrack < Struct.new(:spotify_id, :duration, :artist, :name, :cover_art_url) 
+class SpotifyTrack < Struct.new(:spotify_id, :duration, :artist, :name, :cover_art_url, :album) 
 end
 
 class GetSpotify
@@ -39,6 +39,7 @@ class GetSpotify
 		json_hash["tracks"]["items"].each do |item|
 			
 			image = item["album"]["images"][0]["url"]
+			album = item["album"]["name"]
 			uri = item["id"]
 			duration = item["duration_ms"]
 			seconds = duration/1000
@@ -51,7 +52,7 @@ class GetSpotify
 			 #track = json_hash["tracks"]["items"][0]["name"]
 			 #artist = json_hash["tracks"]["items"][0]["artists"][0]["name"]
 			
-			 arr.push(SpotifyTrack.new(uri,duration,artist,track,image))
+			 arr.push(SpotifyTrack.new(uri, duration, artist, track, image, album))
 			 #puts image
 			 #puts uri 
 			 #puts duration
