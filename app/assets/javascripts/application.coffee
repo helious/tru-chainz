@@ -14,11 +14,15 @@ pause = ->
   time = currentSongData.duration.split ':'
 
   minute = time[0]
-  second = time[1] 
+  second = time[1]
+
+  currentLyric = $ '.lyric.current'
 
   playSpotify minute, second
 
   clearInterval window.highlightLyricsInterval
+
+  currentLyric.addClass 'current'
 
 playSpotify = (startMinute, startSecond) ->
   $('.lyric').removeClass 'current'
