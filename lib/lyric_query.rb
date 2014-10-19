@@ -21,25 +21,27 @@ class LyricQuery
       artist = artist_query
       song = song_query.split('-')[0].split('(')[0].strip.split.join(' ')
 
-      results = nil
+      results = Rails.cache.fetch("#{artist}:#{song}") do
+        json_query = HTTParty.get("http://geci.me/api/lyric/#{ URI.encode song }/#{ URI.encode artist }?json=true")
+        json_query = json_query.body
 
-      json_query = HTTParty.get("http://geci.me/api/lyric/#{ URI.encode song }/#{ URI.encode artist }?json=true")
-      json_query = json_query.body
+        json_hash = JSON.parse(json_query)
 
-      json_hash = JSON.parse(json_query)
+        unless json_hash["count"] == 0
+          results = json_hash["result"]
+          #Just get the first element of the array
+          res = results[0]
+          lrc_link = res["lrc"]
 
-      unless json_hash["count"] == 0
-         results = json_hash["result"]
-         #Just get the first element of the array
-         res = results[0]
-         lrc_link = res["lrc"]
+          lyrics = HTTParty.get(lrc_link)
+          lyrics = lyrics.body
+          lyric_hash = parse_lyrics_to_hash(lyrics)
 
-         lyrics = HTTParty.get(lrc_link)
-         lyrics = lyrics.body
-         lyric_hash = parse_lyrics_to_hash(lyrics)
-       #return lyric_hash
-         return add_genius_annotations(lyric_hash, artist, song)
+          results = add_genius_annotations(lyric_hash, artist, song)
+        end
       end
+
+      results
    end
 
    def parse_lyrics_to_hash lyrics
