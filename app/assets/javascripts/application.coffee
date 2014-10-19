@@ -62,6 +62,12 @@ playSpotify = (startMinute, startSecond) ->
 
         break
 
+    if $('.lyric.current').data() && $('.lyric.current').data().annotations
+      $('#annotation-text').text $('.lyric.current').data().annotations
+      $('#lyric-annotation').show().fadeIn 250
+    else
+      $('#lyric-annotation').fadeOut 250
+
 
   window.highlightLyricsInterval = setInterval highlightLyrics, 100
 
