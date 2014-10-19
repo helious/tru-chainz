@@ -44,15 +44,24 @@ class LyricQuery
 
    def parse_lyrics_to_hash lyrics
       lyric_hash = Hash.new
-      lyric_array = lyrics.split("\n")
-      lyric_array.each do | lyric | 
-         lyric_object = Lyric.new
-         
-         edited_lyric = lyric.sub('[','')
-         edited_lyric = edited_lyric.split(']')
-         lyric_object.lyric = edited_lyric[1]
 
-         lyric_hash[edited_lyric[0]] = lyric_object  
+      lyric_array = lyrics.split("\n")
+
+      lyric_array.each do | lyric | 
+        lyric_split = lyric.split(']')
+
+        if lyric_split.last.present?
+          lyric_split.each do |time|
+            if time != lyric_split.last
+              lyric_object = Lyric.new
+
+              lyric_key = time.sub '[',''
+              lyric_object.lyric = lyric_split.last
+
+              lyric_hash[lyric_key] = lyric_object
+            end
+          end
+        end
       end
 
       return lyric_hash
