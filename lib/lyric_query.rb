@@ -80,7 +80,7 @@ class LyricQuery
 					lyric_hash[lyric_hash.keys[j]].annotations = genius_song.lines[i].annotations
 					i+=1
 				elsif j > 1
-					lyric_hash[lyric_hash.keys[j]].annotations = lyric_hash[lyric_hash.keys[j-1]].annotations
+					#lyric_hash[lyric_hash.keys[j]].annotations = lyric_hash[lyric_hash.keys[j-1]].annotations
 				
 				end
 				j+=1
