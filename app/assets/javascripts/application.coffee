@@ -88,7 +88,7 @@ playSpotify = (startMinute, startSecond) ->
 
   window.highlightLyricsInterval = setInterval highlightLyrics, 100
 
-  window.open "spotify:track:#{$('#spotify-track-id').val()}##{startMinute}:#{startSecond}", '_parent'
+  window.open "spotify:track:#{$('#spotify-track-id').val()}##{startMinute}:#{Math.round(startSecond)}", '_parent'
 
 getLyrics = (artist, track) ->
   $.get "/lyrics/#{artist}/#{track}", (data) ->
@@ -159,3 +159,15 @@ $ ->
       window.currentPlayTime = parseInt($(@).data().minute) * 60 * 1000 + parseInt($(@).data().second) * 1000
 
       $('#play').addClass('play').removeClass('pause').trigger 'click'
+
+  $('#track-progress-bar').on 'click', (e) ->
+    time = currentSongData.duration.split ':'
+
+    minute = time[0]
+    second = time[1]
+
+    totalTrackDuration = parseInt(minute) * 60 * 1000 + parseInt(second) * 1000
+
+    window.currentPlayTime = parseInt(e.pageX - $(@).offset().left) / parseInt($(@).width()) * totalTrackDuration
+
+    $('#play').addClass('play').removeClass('pause').trigger 'click'
