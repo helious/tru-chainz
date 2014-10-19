@@ -19,11 +19,11 @@ class LyricQuery
    #query_song returns -1 if it cannot find a song, else it returns the lyrics
    def query_song artist_query, song_query
       artist = artist_query
-      song = song_query
+      song = song_query.split('-')[0].split('(')[0].strip.split.join(' ')
 
       results = nil
 
-      json_query = HTTParty.get("http://geci.me/api/lyric/#{ URI.encode song_query }/#{ URI.encode artist_query }?json=true")
+      json_query = HTTParty.get("http://geci.me/api/lyric/#{ URI.encode song }/#{ URI.encode artist }?json=true")
       json_query = json_query.body
 
       json_hash = JSON.parse(json_query)

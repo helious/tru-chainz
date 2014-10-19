@@ -92,7 +92,11 @@ getSpotifyTracks = (artist, track) ->
 
 $ ->
   $('#track-player').css 'min-height', $(window).height()
-  $('#track-lyrics').css 'max-height', $(window).height() - 60
+  $('#track-lyrics, #lyric-annotation').css 'max-height', $(window).height() - 60
+
+  $(window).on 'resize', ->
+    $('#track-player').css 'min-height', $(window).height()
+    $('#track-lyrics, #lyric-annotation').css 'max-height', $(window).height() - 60
 
   $('#play').on 'click', ->
     if $('#play').hasClass 'play'
