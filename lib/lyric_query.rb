@@ -38,7 +38,7 @@ class LyricQuery
          lyrics = lyrics.body
          lyric_hash = parse_lyrics_to_hash(lyrics)
        #return lyric_hash
-         return add_genius_annotations_new(lyric_hash, artist, song)
+         return add_genius_annotations(lyric_hash, artist, song)
       end
    end
 
