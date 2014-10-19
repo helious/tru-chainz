@@ -7,7 +7,7 @@
     .columns
       = image_tag 'linebyline.png'
   .row
-    .columns
+    .columns{ style: 'text-align: center;' }
       %h2 Search for a song:
   .row.bump
     .columns.no-padding
@@ -20,7 +20,7 @@
       = button_tag 'Get Lyrics', id: 'get-lyrics', class: 'right'
   .row
     #tracks-header.columns.hide
-      %h2 Songs:
+      %h2.no-vertical-margin Songs:
   .row
     #tracks
       %span Search for some songs!
