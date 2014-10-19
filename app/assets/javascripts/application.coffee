@@ -7,16 +7,17 @@ window.currentPlayTime = 0
 window.highlightLyricsInterval = null
 
 currentSongData = null
+isPause = false
 
 pause = ->
-  window.currentPlayTime = 0
-
   time = currentSongData.duration.split ':'
 
   minute = time[0]
   second = time[1]
 
   currentLyric = $ '.lyric.current'
+
+  isPause = true
 
   playSpotify minute, second
 
@@ -27,7 +28,9 @@ pause = ->
 playSpotify = (startMinute, startSecond) ->
   $('.lyric').removeClass 'current'
 
-  window.currentPlayTime = (startMinute * 60 + startSecond) * 1000
+  window.currentPlayTime = (startMinute * 60 + startSecond) * 1000 unless isPause
+
+  isPause = false
 
   clearInterval window.highlightLyricsInterval
 
@@ -93,13 +96,18 @@ $ ->
 
   $('#play').on 'click', ->
     if $('#play').hasClass 'play'
-      $(@).addClass('pause').removeClass 'play'
+      $('#play').addClass('pause').removeClass 'play'
 
-      playSpotify 0, 0
+      minute = parseInt(window.currentPlayTime / 1000 / 60)
+      second = window.currentPlayTime / 1000 - minute * 60
+
+      playSpotify minute, second
     else
       $('#play').addClass('play').removeClass 'pause'
 
       pause()
+
+  # $(window).on 'keyup', (e) -> $('#play').trigger 'click' if e.keyCode is 32
 
   $('#get-lyrics').on 'click', ->
     getSpotifyTracks $('#artist').val(), $('#track').val()
@@ -111,6 +119,8 @@ $ ->
       $('#play').addClass('play').removeClass 'pause'
 
       pause()
+
+      window.currentPlayTime = 0
 
     $('.track').removeClass 'current'
 
@@ -128,8 +138,9 @@ $ ->
     getLyrics currentSongData.artist, currentSongData.name
 
   $('#lyrics').on 'click', '.lyric', (e) ->
-    e.preventDefault()
+    if $(@).hasClass 'current'
+      $('#play').trigger 'click'
+    else
+      window.currentPlayTime = parseInt($(@).data().minute) * 60 * 1000 + parseInt($(@).data().second) * 1000
 
-    $('#play').addClass('pause').removeClass 'play'
-
-    playSpotify $(@).data().minute, $(@).data().second
+      $('#play').addClass('play').removeClass('pause').trigger 'click'
