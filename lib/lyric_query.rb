@@ -37,7 +37,7 @@ class LyricQuery
          lyrics = HTTParty.get(lrc_link)
          lyrics = lyrics.body
          lyric_hash = parse_lyrics_to_hash(lyrics)
-		 #return lyric_hash
+       #return lyric_hash
          return add_genius_annotations(lyric_hash, artist, song)
       end
    end
@@ -59,37 +59,46 @@ class LyricQuery
    end
 
    def add_genius_annotations lyric_hash, artist, song
-	  a = GeniusQuery.new
+     a = GeniusQuery.new
       genius_song_id = a.get_genius_result_id(artist,song)
       
-	  if (genius_song_id == -1) 
+     if (genius_song_id == -1) 
          return lyric_hash
       else 
          
-		 genius_song = a.get_genius_song(genius_song_id)
-		 
-		 i=0
-		 j=0
-		 while i < genius_song.lines.length
-			while j < lyric_hash.length
-				jarow = FuzzyStringMatch::JaroWinkler.create( :pure )
-				puts genius_song.lines[i].lyric
-				puts lyric_hash
-				perct = jarow.getDistance(genius_song.lines[i].lyric, lyric_hash[lyric_hash.keys[j]].lyric)
-				if perct > 0.5
-					lyric_hash[lyric_hash.keys[j]].annotations = genius_song.lines[i].annotations
-					i+=1
-				elsif j > 1
-					#lyric_hash[lyric_hash.keys[j]].annotations = lyric_hash[lyric_hash.keys[j-1]].annotations
-				
-				end
-				j+=1
-			end
-			i+=1
-		end
+       genius_song = a.get_genius_song(genius_song_id)
+       
+       i=0
+       j=0
+       while i < genius_song.lines.length
+         #puts genius_song.lines[i].annotations
+         if genius_song.lines[i].lyric.include? '['
+            i+=1
+         end
+         
+         while j < lyric_hash.length
+            jarow = FuzzyStringMatch::JaroWinkler.create( :pure )
+            
+            if(lyric_hash[lyric_hash.keys[j]].lyric != nil)
+               perct = jarow.getDistance(genius_song.lines[i].lyric, lyric_hash[lyric_hash.keys[j]].lyric)
+
+               if perct > 0.5
+                  lyric_hash[lyric_hash.keys[j]].annotations = genius_song.lines[i].annotations
+                  #puts genius_song.lines[i].annotations
+                  i+=1
+               elsif j > 1
+                  
+                  #lyric_hash[lyric_hash.keys[j]].annotations = lyric_hash[lyric_hash.keys[j-1]].annotations
+               
+               end
+            end
+            j+=1
+         end
+         i+=1
+      end
 
       end 
-	  return lyric_hash
+     return lyric_hash
    end
 
 end
