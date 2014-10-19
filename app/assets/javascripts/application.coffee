@@ -123,6 +123,7 @@ $ ->
       window.currentPlayTime = 0
 
     $('.track').removeClass 'current'
+    $('#lyric-annotation').fadeOut 250
 
     currentSongData = $(@).addClass('current').data()
 

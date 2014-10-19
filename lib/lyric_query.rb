@@ -67,95 +67,71 @@ class LyricQuery
       return Hash[lyric_hash.sort]
    end
 
+   #This just spreads out annotations, doesn't align them up correctly but it gets the job done
    def add_genius_annotations lyric_hash, artist, song
-     a = GeniusQuery.new
+    a = GeniusQuery.new
       genius_song_id = a.get_genius_result_id(artist,song)
       
-     if (genius_song_id == -1) 
+    if (genius_song_id == -1) 
          return lyric_hash
       else 
          
-       genius_song = a.get_genius_song(genius_song_id)
-       
-       i=0
-       j=0
-       while i < genius_song.lines.length
-         #puts genius_song.lines[i].annotations
-         if genius_song.lines[i].lyric.include? '['
-            i+=1
-         end
-         
-         while j < lyric_hash.length
-            jarow = FuzzyStringMatch::JaroWinkler.create( :pure )
-            
-            if(lyric_hash[lyric_hash.keys[j]].lyric != nil && genius_song.lines[i].present?)
-               perct = jarow.getDistance(genius_song.lines[i].lyric, lyric_hash[lyric_hash.keys[j]].lyric)
-
-               if perct > 0.5
-                  lyric_hash[lyric_hash.keys[j]].annotations = genius_song.lines[i].annotations
-                  #puts genius_song.lines[i].annotations
-                  i+=1
-               elsif j > 1
-                  
-                  #lyric_hash[lyric_hash.keys[j]].annotations = lyric_hash[lyric_hash.keys[j-1]].annotations
-               
-               end
-            end
-            j+=1
-         end
-         i+=1
+     genius_song = a.get_genius_song(genius_song_id)
+     
+     i=0
+     j=0
+     while i < (genius_song.lines.length - 1)
+      #puts genius_song.lines.length
+      #puts "i is #{i} of #{genius_song.lines.length}"
+      
+      #puts genius_song.lines[i].annotations
+      if genius_song.lines[i].lyric.include? '[' || genius_song.lines[i].lyric == nil
+        i+=1
       end
+      j = 0;
+      while j < (lyric_hash.length - 1)
+        #puts "hash length is #{lyric_hash.length}"
+        #puts "i is #{i}"
+        #puts "j is #{j}"
+        
+        while lyric_hash[lyric_hash.keys[j]].lyric == nil || lyric_hash[lyric_hash.keys[j]].lyric == ""
+          j+=1
+          
+        end
+        #binding.pry
+        jarow = FuzzyStringMatch::JaroWinkler.create( :pure )
+      
+      
+        gline = genius_song.lines[i].lyric.downcase.gsub(/[^0-9A-Za-z]/, '').gsub("quot","")
+        lline = lyric_hash[lyric_hash.keys[j]].lyric.downcase.gsub(/[^0-9A-Za-z]/, '').gsub("quot","")
+        
+        #if(lline != nil)
+        
+          
+           #puts " Genius: #{gline}"
+           #puts " Ghetto: #{lline}"
+        
+          perct = jarow.getDistance(gline, lline) 
+          #puts "percentage is #{perct}"
+          if perct > 0.70 
+            lyric_hash[lyric_hash.keys[j]].annotations = genius_song.lines[i].annotations
+          
+          elsif gline.include?(lline)
+            #binding.pry
+            #puts "in"
+            lyric_hash[lyric_hash.keys[j]].annotations = genius_song.lines[i].annotations
+        
+          #else puts "do nothing"
+            #lyric_hash[lyric_hash.keys[j]].annotations = lyric_hash[lyric_hash.keys[j-1]].annotations
+          
+          end
+        #end
+        j+=1
+      end
+      i+=1
+    end
 
       end 
-     return lyric_hash
-   end
-
-
-
-   #This just spreads out annotations, doesn't align them up correctly but it gets the job done
-   def add_genius_annotations_new lyric_hash, artist, song
-      a = GeniusQuery.new
-      genius_song_id = a.get_genius_result_id(artist, song)
-
-      if (genius_song_id == -1)
-         return lyric_hash
-      end
-
-      genius_song = a.get_genius_song(genius_song_id)
-      
-      #genius_song.lines[i].lyric
-      #lyric_hash[lyric_hash.keys[j]].lyric
-      
-      #Find a valid j index to start with
-      j = 0
-      while true
-         key = lyric_hash.keys[j]
-         key = key.split(":")
-         if key[0] == "00"
-            if key[1].to_i >= 0
-               break
-            end
-         end
-         j+=1
-      end
-
-
-      lyric_hash_length = lyric_hash.length - j
-      genius_song_length = genius_song.lines.length 
-
-
-      ratio = genius_song_length.to_f/lyric_hash_length
-      i = 0
-      while true
-         j = (i*ratio).floor
-         if j >= lyric_hash_length || i >= genius_song_length
-            break 
-         end
-         lyric_hash[lyric_hash.keys[j]].annotations = genius_song.lines[i].annotations
-         i+=1
-         j=0
-      end
-     
-     return lyric_hash
+    return lyric_hash
    end
 end
