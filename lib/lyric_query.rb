@@ -38,7 +38,7 @@ class LyricQuery
          lyrics = lyrics.body
          lyric_hash = parse_lyrics_to_hash(lyrics)
        #return lyric_hash
-         return add_genius_annotations(lyric_hash, artist, song)
+         return add_genius_annotations_new(lyric_hash, artist, song)
       end
    end
 
@@ -101,4 +101,52 @@ class LyricQuery
      return lyric_hash
    end
 
+
+
+   #This just spreads out annotations, doesn't align them up correctly but it gets the job done
+   def add_genius_annotations_new lyric_hash, artist, song
+      a = GeniusQuery.new
+      genius_song_id = a.get_genius_result_id(artist, song)
+
+      if (genius_song_id == -1)
+         return lyric_hash
+      end
+
+      genius_song = a.get_genius_song(genius_song_id)
+      
+      #genius_song.lines[i].lyric
+      #lyric_hash[lyric_hash.keys[j]].lyric
+      
+      #Find a valid j index to start with
+      j = 0
+      while true
+         key = lyric_hash.keys[j]
+         key = key.split(":")
+         if key[0] == "00"
+            if key[1].to_i >= 0
+               break
+            end
+         end
+         j+=1
+      end
+
+
+      lyric_hash_length = lyric_hash.length - j
+      genius_song_length = genius_song.lines.length 
+
+
+      ratio = genius_song_length.to_f/lyric_hash_length
+      i = 0
+      while true
+         j = (i*ratio).floor
+         if j >= lyric_hash_length || i >= genius_song_length
+            break 
+         end
+         lyric_hash[lyric_hash.keys[j]].annotations = genius_song.lines[i].annotations
+         i+=1
+         j=0
+      end
+     
+     return lyric_hash
+   end
 end
