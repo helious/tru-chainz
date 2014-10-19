@@ -69,6 +69,16 @@ playSpotify = (startMinute, startSecond) ->
 
         break
 
+    if window.currentPlayTime > totalTrackDuration
+      pause()
+
+      window.currentPlayTime = 0
+
+      $('#play').addClass('play').removeClass 'pause'
+      $('#track-time').text '0:00'
+      $('#track-progress-bar').css 'background', "linear-gradient(to right, #f5110a 0%,#000000 0%,#000000 100%)"
+
+
     if $('.lyric.current').data() && $('.lyric.current').data().annotations
       $('#annotation-text').text $('.lyric.current').data().annotations
       $('#lyric-annotation').show().fadeIn 250
