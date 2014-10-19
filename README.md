@@ -1,12 +1,10 @@
-tru-chainz
-==============
+#tru-chainz
 Music is the ultimate medium in which we all communicate in the world - it allows for a level of expression of self, feelings, and ideas that no other platform can really compare on a global scale.
 Given the inter-communicability of music, even in our native tongues, the meaning of songs can lose or misrepresent the meaning trying to be conveyed.
 
 So, our goal with tru-chainz was to be able to understand the music that we listen to. Enlisting crowd-sourcing technologies such as genius to interpret lyrics, Spotify to connect us to the music we enjoy every day, and the LRC files that take the spoken word and map them to written language could we marry them together and make a product that helps us listen, understand, and enjoy the message trying to be portrayed by artists that we love. 
 
-#demo
-==============
+##demo
 For it to work, you must have Spotify's native application installed and running on your computer. It will only work on your computer. Make sure you give your browser permission to open spotify uris for you. Have fun. =]
 
 [tru-chainz](http://tru-chainz.herokuapp.com)
