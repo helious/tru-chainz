@@ -9,4 +9,4 @@ This was created for the first [Hack with Coke](http://www.hackwithcoke.com) com
 
 For it to work, you must have Spotify's native application installed and running on your computer. It will only work on your computer. Make sure you give your browser permission to open spotify uris for you. Have fun. =]
 
-[tru-chainz](http://tru-chainz.herokuapp.com)
+[tru-chainz demo](http://tru-chainz.herokuapp.com)
