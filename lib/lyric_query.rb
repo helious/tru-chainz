@@ -79,7 +79,7 @@ class LyricQuery
          while j < lyric_hash.length
             jarow = FuzzyStringMatch::JaroWinkler.create( :pure )
             
-            if(lyric_hash[lyric_hash.keys[j]].lyric != nil)
+            if(lyric_hash[lyric_hash.keys[j]].lyric != nil && genius_song.lines[i].present?)
                perct = jarow.getDistance(genius_song.lines[i].lyric, lyric_hash[lyric_hash.keys[j]].lyric)
 
                if perct > 0.5
