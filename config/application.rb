@@ -6,7 +6,11 @@ require 'sprockets/railtie'
 
 Bundler.require(*Rails.groups)
 
-module HackWithCoke
+#require 'json'
+#require 'httparty'
+#require 'fuzzystringmatch'
+
+module TruChainz
   class Application < Rails::Application
   end
 end

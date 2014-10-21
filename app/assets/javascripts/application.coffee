@@ -6,11 +6,11 @@
 window.currentPlayTime = 0
 window.highlightLyricsInterval = null
 
-currentSongData = null
+currentTrack = null
 isPause = false
 
 pause = ->
-  time = currentSongData.duration.split ':'
+  time = currentTrack.duration.split ':'
 
   minute = time[0]
   second = time[1]
@@ -49,7 +49,7 @@ playSpotify = (startMinute, startSecond) ->
 
     $('#track-time').text "#{currentPlayTimeMinute}:#{getZero currentPlayTimeSecond}#{currentPlayTimeSecond}"
 
-    time = currentSongData.duration.split ':'
+    time = currentTrack.duration.split ':'
 
     minute = time[0]
     second = time[1]
@@ -90,13 +90,13 @@ playSpotify = (startMinute, startSecond) ->
 
   window.open "spotify:track:#{$('#spotify-track-id').val()}##{startMinute}:#{Math.round(startSecond)}", '_parent'
 
-getLyrics = (artist, track) ->
-  $.get "/lyrics/#{artist}/#{track}", (data) ->
+getLyrics = (artist, title) ->
+  $.get "/lyrics/#{artist}/#{title}", (data) ->
     $('#track-player').show 'slide', { direction: 'left' }, 400
     $('#lyrics').show().html data
 
-getSpotifyTracks = (artist, track) ->
-  $.get "/track?artist=#{artist}&track=#{track}", (data) ->
+getSpotifyTracks = (artist, title) ->
+  $.get "/tracks?artist=#{artist}&title=#{title}", (data) ->
     $('#tracks, #tracks-header').show()
     $('#tracks').html data
 
@@ -129,7 +129,7 @@ $ ->
   $('#tracks').on 'click', '.track', (e) ->
     $('#track-player').hide 'slide', { direction: 'right' }, 400
 
-    if currentSongData
+    if currentTrack
       $('#play').addClass('play').removeClass 'pause'
 
       pause()
@@ -139,18 +139,18 @@ $ ->
     $('.track').removeClass 'current'
     $('#lyric-annotation').fadeOut 250
 
-    currentSongData = $(@).addClass('current').data()
+    currentTrack = $(@).addClass('current').data()
 
-    $('#album-art').attr 'src', currentSongData.coverArtUrl
-    $('.track-title').text currentSongData.name
-    $('#track-album').text currentSongData.album
-    $('#track-artist').text currentSongData.artist
-    $('#spotify-track-id').val currentSongData.id
+    $('#album-art').attr 'src', currentTrack.coverArtUrl
+    $('.track-title').text currentTrack.name
+    $('#track-album').text currentTrack.album
+    $('#track-artist').text currentTrack.artist
+    $('#spotify-track-id').val currentTrack.id
     $('#track-time').text '0:00'
-    $('#track-duration').text currentSongData.duration.substr(1)
+    $('#track-duration').text currentTrack.duration.substr(1)
     $('#track-progress-bar').css 'background', "linear-gradient(to right, #f5110a 0%,#000000 0%,#000000 100%)"
 
-    getLyrics currentSongData.artist, currentSongData.name
+    getLyrics currentTrack.artist, currentTrack.name
 
   $('#lyrics').on 'click', '.lyric', (e) ->
     if $(@).hasClass 'current'
@@ -161,7 +161,7 @@ $ ->
       $('#play').addClass('play').removeClass('pause').trigger 'click'
 
   $('#track-progress-bar').on 'click', (e) ->
-    time = currentSongData.duration.split ':'
+    time = currentTrack.duration.split ':'
 
     minute = time[0]
     second = time[1]
