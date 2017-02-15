@@ -10,3 +10,8 @@ This was created for the first [Hack with Coke](http://www.hackwithcoke.com) com
 For it to work, you must have Spotify's native application installed and running on your computer. It will only work on your computer. Make sure you give your browser permission to open spotify uris for you. Have fun. =]
 
 [tru-chainz demo](http://tru-chainz.herokuapp.com)
+
+##info
+Event: https://www.facebook.com/events/1533750166842785/
+
+![hackwithcode](https://scontent-mia1-2.xx.fbcdn.net/v/t1.0-9/10704138_10152764721418080_7096256623230151076_n.jpg?oh=ba7afdff56ad6c7ce178ff1dbb0dabe5&oe=58FE4668)
